@@ -4,8 +4,10 @@
   "description": "简易版vue3源码实现",
   "main": "index.js",
   "private": true,
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "node scripts/dev.js --module reactivity",
+    "build": "node scripts/build.js"
   },
   "keywords": [],
   "author": "jaylenchan <jaylen.work@hotmail.com>",
@@ -16,7 +18,8 @@
   "devDependencies": {
     "@rollup/plugin-json": "^6.0.0",
     "@rollup/plugin-node-resolve": "^15.0.1",
-    "execa": "^7.0.0",
+    "execa": "^5.0.0",
+    "rimraf": "^4.1.2",
     "rollup": "^3.15.0",
     "rollup-plugin-typescript2": "^0.34.1",
     "typescript": "^4.9.5"
