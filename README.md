@@ -1,0 +1,6 @@
+- typescript
+- rollup
+- rollup-plugin-typescript2
+- @rollup/plugin-node-resolve:使用 "node 解析算法" 来定位模块，用于使用 node_modules 中的第三方模块,rollup本身支持的esm的定位，所以平时使用的require("x")，它是不知道直接去这个地方找的，它默认只支持完整的相对路径。又比如import './answer/index.ts'，如果写成'./answer'这是我们想要的效果，但rollup就不支持，使用这个插件才能让rollup识别完成使用node解析算法
+- @rollup/plugin-json，支持rollup引入json
+- execa 

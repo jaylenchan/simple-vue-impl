@@ -1,7 +1,7 @@
 {
   "name": "@vue/shared",
   "version": "1.0.0",
-  "description": "",
+  "description": "共享工具包",
   "main": "index.js",
   "module": "dist/esm.js",
   "type": "module",

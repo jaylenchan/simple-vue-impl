@@ -13,7 +13,7 @@
   "author": "jaylenchan <jaylen.work@hotmail.com>",
   "license": "MIT",
   "workspaces": [
-    "pakcages/*"
+    "packages/*"
   ],
   "devDependencies": {
     "@rollup/plugin-json": "^6.0.0",
