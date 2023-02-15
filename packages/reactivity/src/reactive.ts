@@ -4,7 +4,7 @@ import {
   readonlyHandler,
   shallowReactiveHandler,
   shallowReadonlyHandler
-} from './handlers';
+} from './baseHandlers';
 
 const reactiveCache = new WeakMap<Object, Object>();
 const readonlyCache = new WeakMap<Object, Object>();

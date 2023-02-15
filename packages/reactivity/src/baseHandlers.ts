@@ -1,10 +1,5 @@
 import { TrackType, TriggerType } from './operators';
-import {
-  isArray,
-  isInteger,
-  hasProp,
-  hasChanged
-} from './../../shared/src/index';
+import { isArray, isInteger, hasOwn, hasChanged } from '../../shared/src/index';
 import { track, trigger } from './effect';
 import { readonly as Readonly, reactive } from './reactive';
 
@@ -26,7 +21,7 @@ function createGetter(deep: boolean = true, readonly: boolean = false) {
      * # 留下readonly和reactive递归转化响应式
      */
     if (!deep) {
-      return val; 
+      return val;
     }
 
     return readonly ? Readonly(val) : reactive(val);
@@ -37,14 +32,14 @@ function createSetter(deep: boolean) {
   console.log('setter deep', deep);
   return (target: Object, key: string, newVal: unknown, receiver: unknown) => {
     const flag = Reflect.set(target, key, newVal, receiver);
-    const hasKey = isArray(target)
-      ? isInteger(key) && +key < target.length
-      : hasProp(target, key);
-    const oldVal = Reflect.get(target, key);
 
-    if (!hasKey) {
+    // setter判断是新增还是修改
+    if (!hasOwn(target, key)) {
+      // ADD新增
       trigger(TriggerType.ADD, target, key, newVal);
     } else {
+      // SET修改
+      const oldVal = Reflect.get(target, key);
       hasChanged(oldVal, newVal) &&
         trigger(TriggerType.SET, target, key, newVal, oldVal);
     }
