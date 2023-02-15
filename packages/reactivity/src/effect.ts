@@ -1,13 +1,22 @@
 import { isArray, isInteger } from './../../shared/src/index';
 import { TrackType, TriggerType } from './operators';
-type Effect = (...args: unknown[]) => void;
+
+type EffectOptions = { lazy?: boolean; scheduler?: Function };
+export interface Effect {
+  (...args: unknown[]): void;
+  id: number;
+  _isEffect: boolean;
+  raw: Function;
+  options: { lazy?: boolean; scheduler?: Function };
+}
 
 let uid = 0;
 const effectStack: Effect[] = [];
 const depCache = new WeakMap<Object, Map<string, Set<Effect>>>();
 
 export function track(trackType: TrackType, target: Object, key: string) {
-  console.log(trackType == TrackType.GET);
+  if (!(trackType == TrackType.GET)) return;
+
   const reactiveEffect = effectStack[effectStack.length - 1];
 
   if (!reactiveEffect) return; // 肯定不是在effect中使用的，如果在这个函数一定不为空
@@ -33,10 +42,9 @@ export function trigger(
   triggerType: TriggerType,
   target: Object,
   key: string,
-  newVal: unknown,
-  oldVal?: unknown
+  newVal?: unknown,
+  _oldVal?: unknown
 ) {
-  console.log('oldVal', oldVal);
   if (!depCache.has(target)) return;
 
   const execEffects = new Set<Effect>();
@@ -81,11 +89,17 @@ export function trigger(
   }
 
   // #将需要执行的effect一个个拿出来执行
-  execEffects.forEach((effect) => effect());
+  execEffects.forEach((effect) => {
+    if (effect.options.scheduler) {
+      effect.options.scheduler();
+    } else {
+      effect();
+    }
+  });
 }
 
-function createReactiveEffect(fn: Function, options: unknown = {}) {
-  const reactiveEffect = () => {
+function createReactiveEffect(fn: Function, options: EffectOptions = {}) {
+  const reactiveEffect: Effect = () => {
     if (!effectStack.includes(reactiveEffect)) {
       try {
         effectStack.push(reactiveEffect);
@@ -104,7 +118,7 @@ function createReactiveEffect(fn: Function, options: unknown = {}) {
   return reactiveEffect;
 }
 
-export function effect(fn: Function, options: any = {}) {
+export function effect(fn: Function, options: EffectOptions = {}) {
   const reactiveEffect = createReactiveEffect(fn, options);
 
   // 默认会先执行一次转换成响应式后的effect（即无lazy属性默认情况下，这时候会先执行一次）

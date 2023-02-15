@@ -28,8 +28,7 @@ function createGetter(deep: boolean = true, readonly: boolean = false) {
   };
 }
 
-function createSetter(deep: boolean) {
-  console.log('setter deep', deep);
+function createSetter(_deep: boolean) {
   return (target: Object, key: string, newVal: unknown, receiver: unknown) => {
     const flag = Reflect.set(target, key, newVal, receiver);
 

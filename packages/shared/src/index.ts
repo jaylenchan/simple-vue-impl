@@ -27,5 +27,5 @@ export const hasOwn = (target: Object, key: string): boolean => {
 };
 
 export const hasChanged = (oldVal: unknown, newVal: unknown): boolean => {
-  return oldVal == newVal;
+  return oldVal != newVal;
 };

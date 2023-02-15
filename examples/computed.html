@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Computed Example</title>
+</head>
+
+<body>
+  <script type="module">
+    import { reactive, effect, ref, toRefs, computed } from '../node_modules/@vue/reactivity/dist/esm.js';
+
+    const age = ref(0);
+
+    const myAge = computed(() => {
+      return age.value + 1
+    })
+
+    effect(() => {
+      document.body.innerText = myAge.value
+    })
+
+    setTimeout(() => {
+      age.value = 100
+    }, 1000)
+  </script>
+</body>
+
+</html>
