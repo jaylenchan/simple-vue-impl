@@ -1,3 +1,10 @@
-import shared from '@vue/shared';
+export {
+  shallowReactive,
+  reactive,
+  shallowReadonly,
+  readonly
+} from './reactive';
 
-export default {};
+export { effect } from './effect';
+
+export { ref, shallowRef, toRef, toRefs } from './ref';

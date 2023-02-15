@@ -25,7 +25,8 @@ function output(format) {
     name: packageJson().name.split('/')[1],
     format: formatMap[format],
     file: path.resolve(process.env.MODULE, `dist/${format}.js`),
-    sourcemap: true
+    sourcemap: true,
+    extend: true
   };
 
   return config;

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reactivity Example</title>
+</head>
+
+<body>
+  <script type="module">
+    import { reactive, shallowReactive, readonly, shallowReadonly } from '../node_modules/@vue/reactivity/dist/esm.js';
+
+    const state = reactive({
+      name: 'jaylen',
+      age: 26,
+      hobbies: { name: 'food' }
+    })
+
+    const state1 = shallowReactive({
+      name: 'jaylen',
+      age: 26,
+      hobbies: { name: 'food' }
+    })
+
+    const state2 = readonly({
+      name: 'jay',
+      friends: { b: 'ddddd' }
+    })
+
+    const state3 = shallowReadonly({
+      name: 'may',
+      friends: { a: 'hei' }
+    })
+
+    state1.hobbies.name = 'ffffff'
+    console.log(state1)
+  </script>
+</body>
+
+</html>
