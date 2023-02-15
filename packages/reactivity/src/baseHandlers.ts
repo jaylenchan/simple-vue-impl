@@ -1,5 +1,5 @@
 import { TrackType, TriggerType } from './operators';
-import { isArray, isInteger, hasOwn, hasChanged } from '../../shared/src/index';
+import { hasOwn, hasChanged } from '../../shared/src/index';
 import { track, trigger } from './effect';
 import { readonly as Readonly, reactive } from './reactive';
 

@@ -118,4 +118,5 @@ export function effect(fn: Function, options: any = {}) {
 /**
  * 1. effect为基础包装的函数都要跟reactive几个api结合使用才有效果，否则只是单纯的自定义对象，没经过reactive，是不会收集依赖的，执行赋值操作自然也不会进行视图相关更新。
  * 2. effectStack保存effect的原因是，effect嵌套使用，单用一个全局变量记录当前活动的effect，track收集依赖需要当前track的key找对应的effect时很可能出错，但是如果换成取栈顶元素一定不会出错，因为执行完内层，会弹出相关effect
+ * 3. 在effect中使用到的属性会track收集effect，更改属性的时候，如果是在effect中出现的属性会trigger让effect重新执行
  */
