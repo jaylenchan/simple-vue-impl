@@ -91,12 +91,16 @@ export function trigger(
           }
         }
       }
-
-      execReactiveEffects.forEach(reactiveEffect => {
-        reactiveEffect()
-      })
     }))
   }
+
+  execReactiveEffects.forEach(reactiveEffect => {
+    if (reactiveEffect.options.scheduler) {
+      reactiveEffect.options.scheduler()
+    } else {
+      reactiveEffect() 
+    }
+  })
 }
 
 
