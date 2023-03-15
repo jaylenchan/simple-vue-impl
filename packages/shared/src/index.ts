@@ -23,7 +23,7 @@ export const isObject = (val: unknown): boolean => {
 };
 
 export const hasOwn = (target: Object, key: string): boolean => {
-  return Object.hasOwn(target, key);
+  return Object.prototype.hasOwnProperty.call(target, key);
 };
 
 export const hasChanged = (oldVal: unknown, newVal: unknown): boolean => {

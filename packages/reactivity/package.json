@@ -15,5 +15,8 @@
     "esm",
     "cjs",
     "global"
-  ]
+  ],
+  "dependencies": {
+    "@vue/shared": "^3.2.47"
+  }
 }

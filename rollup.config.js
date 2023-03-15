@@ -39,7 +39,7 @@ function makeRollupConfig(format) {
     plugins: [
       json(),
       typescript({
-        tsconfig: path.resolve(path.dirname('.'), 'tsconfig.json')
+        tsconfig: path.resolve(path.dirname('.'), './tsconfig.json')
       }),
       nodeResolve()
     ]
