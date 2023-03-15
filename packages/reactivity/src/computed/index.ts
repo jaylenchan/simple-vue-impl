@@ -1,6 +1,6 @@
-import { isFunction } from './../../shared/src/index';
-import { Effect, effect, track, trigger } from './effect';
-import { TrackType, TriggerType } from './operators';
+import { isFunction } from '../../../shared/src/index';
+import { Effect, effect, track, trigger } from '../effect';
+import { TrackType, TriggerType } from '../operators';
 
 type ComputedGetter = (...args: any[]) => unknown;
 type ComputedSetter = (newVal: unknown) => void;
