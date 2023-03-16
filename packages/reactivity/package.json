@@ -1,5 +1,5 @@
 {
-  "name": "@vue/reactivity",
+  "name": "@vue3/reactivity",
   "version": "1.0.0",
   "description": "响应式包",
   "main": "index.js",
@@ -17,6 +17,6 @@
     "global"
   ],
   "dependencies": {
-    "@vue/shared": "^3.2.47"
+    "@vue3/shared": "workspace:^1.0.0"
   }
 }

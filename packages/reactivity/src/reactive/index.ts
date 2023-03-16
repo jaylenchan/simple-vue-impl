@@ -1,4 +1,4 @@
-import { isObject } from '@vue/shared';
+import { isObject } from '@vue3/shared';
 import {
   reactiveHandler,
   readonlyHandler,
@@ -29,28 +29,28 @@ function createReactiveObject(
 
   let proxy = cache.get(target)
 
-  if(!proxy) {
-    proxy =  new Proxy(target, handler) 
-    cache.set(target,proxy );
+  if (!proxy) {
+    proxy = new Proxy(target, handler)
+    cache.set(target, proxy);
   }
-  
+
   return proxy
 }
 
 export function shallowReactive(target: Object) {
-  return createReactiveObject( target, shallowReactiveHandler,false);
+  return createReactiveObject(target, shallowReactiveHandler, false);
 }
 
 export function reactive(target: Object) {
-  return createReactiveObject(target, reactiveHandler,false);
+  return createReactiveObject(target, reactiveHandler, false);
 }
 
 export function shallowReadonly(target: Object) {
-  return createReactiveObject( target, shallowReadonlyHandler,true)
+  return createReactiveObject(target, shallowReadonlyHandler, true)
 }
 
 export function readonly(target: Object) {
-  return createReactiveObject( target, readonlyHandler,true);
+  return createReactiveObject(target, readonlyHandler, true);
 }
 
 /**

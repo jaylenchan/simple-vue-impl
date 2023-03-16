@@ -1,4 +1,4 @@
-import { isArray, isInteger } from '../../../shared/src/index';
+import { isArray, isInteger } from '@vue3/shared';
 import { TrackType, TriggerType } from '../operators';
 
 type EffectOptions = { lazy?: boolean; scheduler?: Function };
@@ -98,7 +98,7 @@ export function trigger(
     if (reactiveEffect.options.scheduler) {
       reactiveEffect.options.scheduler()
     } else {
-      reactiveEffect() 
+      reactiveEffect()
     }
   })
 }

@@ -1,0 +1,14 @@
+{
+  "name": "@vue3/runtime-dom",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "formats": [
+    "esm",
+    "global"
+  ],
+  "dependencies": {
+    "@vue3/runtime-core": "workspace:^1.0.0",
+    "@vue3/shared": "workspace:^1.0.0"
+  }
+}

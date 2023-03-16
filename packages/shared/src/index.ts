@@ -29,3 +29,9 @@ export const hasOwn = (target: Object, key: string): boolean => {
 export const hasChanged = (oldVal: unknown, newVal: unknown): boolean => {
   return oldVal != newVal;
 };
+
+export const isEvent = (key: string): boolean => {
+  return /^on[^a-z]+/.test(key)
+}
+
+export { ShapeFlags } from './shapeFlags'

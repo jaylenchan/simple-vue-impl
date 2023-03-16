@@ -1,4 +1,4 @@
-import { isFunction } from '@vue/shared'
+import { isFunction } from '@vue3/shared'
 import { ReactiveEffect, effect, track, trigger } from '../effect';
 import { TrackType, TriggerType } from '../operators';
 

@@ -1,16 +1,9 @@
 {
-  "name": "@vue/shared",
+  "name": "@vue3/shared",
   "version": "1.0.0",
-  "description": "共享工具包",
   "main": "index.js",
   "module": "dist/esm.js",
   "type": "module",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "formats": [
     "esm",
     "cjs"

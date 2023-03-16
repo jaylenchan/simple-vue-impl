@@ -1,4 +1,4 @@
-import { isObject, hasChanged, isArray } from '@vue/shared';
+import { isObject, hasChanged, isArray } from '@vue3/shared';
 import { track, trigger } from '../effect';
 import { TrackType, TriggerType } from '../operators';
 import { reactive } from '../reactive';

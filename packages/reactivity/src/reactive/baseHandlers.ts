@@ -1,21 +1,21 @@
 import { TrackType, TriggerType } from '../operators';
-import { hasOwn, hasChanged, isArray, isInteger } from '@vue/shared';
+import { hasOwn, hasChanged, isArray, isInteger } from '@vue3/shared';
 import { track, trigger } from '../effect';
 import { readonly as Readonly, reactive } from '..';
 
 function createGetter(readonly: boolean, shallow: boolean) {
-  return (target:object, key:string, receiver:object) => {
-    const value = Reflect.get(target,key, receiver)
+  return (target: object, key: string, receiver: object) => {
+    const value = Reflect.get(target, key, receiver)
 
     // 如果不是只读的，需要收集依赖
-    if(!readonly) {
+    if (!readonly) {
       // 收集依赖：指的是effect”用户自定义函数“跟”用户自定义函数调用的时候，响应式代理内部target使用到的key“产生关联。
       // 实际上，真正跟key关联的是effect函数创建出来的reactiveEffect函数
-      track( target,TrackType.GET, key)
+      track(target, TrackType.GET, key)
     }
 
     // 如果是浅代理， 到这里直接返回值
-    if(shallow) {
+    if (shallow) {
       return value
     }
 
@@ -32,18 +32,18 @@ function createSetter(_shallow: boolean) {
     // NOTE:如何判断一个属性是新增还是修改：方式就是拿这个属性到对象那边查一下，有这个属性此时触发setter就是修改操作，否则就是新增操作咯: const oldValue = target[key]
     // 第一步：判断本次setter操作是新增操作还是修改操作
     // 对于修改操作，只拿数组合法范围的key进行判断，对于对象，直接判断target有没有该key
-    const hadKey = isArray(target) && isInteger(key) ? +key < target.length : hasOwn(target,key)
+    const hadKey = isArray(target) && isInteger(key) ? +key < target.length : hasOwn(target, key)
     const oldVal = target[key as keyof typeof target]
-    if(!hadKey) {
+    if (!hadKey) {
       // 新增
-      trigger(target,TriggerType.ADD,key,newVal)
-    }else {
+      trigger(target, TriggerType.ADD, key, newVal)
+    } else {
       // 修改
       // 修改的场景下，只有新值跟旧值不同的情况下，才进行视图触发更新，即重新调用key对应的reactiveEffect
-      if(hasChanged(oldVal, newVal)) {
-        trigger(target,TriggerType.SET,key, newVal,oldVal)
+      if (hasChanged(oldVal, newVal)) {
+        trigger(target, TriggerType.SET, key, newVal, oldVal)
       }
-    } 
+    }
 
     return flag;
   };
@@ -65,7 +65,7 @@ const readonlySetter = () => {
 export const shallowReactiveHandler = {
   get: shallowReactiveGetter,
   set: shallowReactiveSetter
-}; 
+};
 
 export const reactiveHandler = {
   get: reactiveGetter,
