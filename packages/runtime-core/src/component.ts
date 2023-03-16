@@ -16,6 +16,7 @@ export interface ComponentInstance {
     _: ComponentInstance;
   } | null,
   render: (() => VNode) | null
+  update: null
 }
 
 export function createComponentInstance(vnode: VNode): ComponentInstance {
@@ -31,7 +32,8 @@ export function createComponentInstance(vnode: VNode): ComponentInstance {
     ctx: null,
     children: null,
     proxy: null,
-    render: null
+    render: null,
+    update: null
   }
 
   componentInstance.ctx = { _: componentInstance }

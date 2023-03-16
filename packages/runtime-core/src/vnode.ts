@@ -11,6 +11,10 @@ export interface VNode {
   component: unknown | null
 }
 
+export function isVNode(vnode: any): boolean {
+  return !!vnode._isVNode
+}
+
 function normalizeChildren(vnode: VNode, children: Record<string, unknown> | null) {
   let type = 0
 

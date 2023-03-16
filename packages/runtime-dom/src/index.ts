@@ -21,6 +21,8 @@ export function createApp(rootComponent: Record<string, unknown>, rootProps: Rec
 
     mount(containerSelector)
   }
-  
+
   return app
 }
+
+export * from '@vue3/runtime-core'

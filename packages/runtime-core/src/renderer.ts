@@ -27,14 +27,14 @@ export function createRenderer(rendererOptions: RendererOptions) {
     // 调用setup拿到返回值，获取render函数的返回结果
 
     // 1. 先创建组件实例
-    const instance = createComponentInstance(vnode)
-    vnode.component = instance
+    const componentInstance = createComponentInstance(vnode)
+    vnode.component = componentInstance
 
     // 2.将需要的数据挂载到instance
-    setupComponent(instance)
+    setupComponent(componentInstance)
 
     // 3.
-    setupRenderEffect(instance)
+    setupRenderEffect(componentInstance)
   }
 
   const processComponent = (n1: unknown | null, vnode: VNode, container: unknown) => {
