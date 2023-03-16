@@ -2,6 +2,8 @@ import { ShapeFlags, isString, isFunction, isObject } from '@vue3/shared';
 import { VNode } from './vnode';
 import { componentPublicProxyHandler } from './componentPublicInstance';
 
+import type { ReactiveEffect } from '@vue3/reactivity';
+
 export interface ComponentInstance {
   vnode: VNode,
   type: VNode["type"],
@@ -15,8 +17,11 @@ export interface ComponentInstance {
   proxy: {
     _: ComponentInstance;
   } | null,
-  render: (() => VNode) | null
-  update: null
+  render: ((proxy: {
+    _: ComponentInstance;
+  }) => VNode) | null
+  update: ReactiveEffect | null
+  subTree: VNode | null
 }
 
 export function createComponentInstance(vnode: VNode): ComponentInstance {
@@ -33,7 +38,8 @@ export function createComponentInstance(vnode: VNode): ComponentInstance {
     children: null,
     proxy: null,
     render: null,
-    update: null
+    update: null,
+    subTree: null
   }
 
   componentInstance.ctx = { _: componentInstance }
@@ -55,7 +61,7 @@ function finishComponentSetup(componentInstance: ComponentInstance) {
   if (!componentInstance.render) {
     // 没有render提供，需要对template模板进行编译，产生出render函数
     if (!component.render && component.template) {
-      const compile = (template: string) => {}
+      const compile = (template: string) => { }
       component.render = compile(component.template)
     }
     componentInstance.render = component.render

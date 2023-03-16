@@ -2,6 +2,7 @@ import { ShapeFlags } from '@vue3/shared';
 import { createAppAPI } from './apiCreateApp';
 import { VNode } from './vnode';
 import { ComponentInstance, createComponentInstance, setupComponent } from './component';
+import { effect } from '@vue3/reactivity';
 
 interface RendererOptions {
   createElement(tag: string): Element;
@@ -19,13 +20,25 @@ export type Render = (vnode: VNode, container: HTMLElement) => void
 export function createRenderer(rendererOptions: RendererOptions) {
 
   // 实际调用组件的render方法了
-  const setupRenderEffect = (componentInstance: ComponentInstance) => {
-    componentInstance.render?.()
+  const setupRenderEffect = (componentInstance: ComponentInstance, container: HTMLElement) => {
+    // 每个组件都有一个effect，vue3是组件级更新
+    componentInstance.update = effect(function componentEffect() {
+      if (!componentInstance.isMounted) {
+        // 初次渲染
+        const subTree = componentInstance.render?.call(componentInstance.proxy!, componentInstance.proxy!)!
+
+        componentInstance.subTree = subTree
+
+        patch(null, subTree, container)
+
+        componentInstance.isMounted = true
+      } else {
+        // 更新渲染
+      }
+    })
   }
 
-  const mountComponent = (vnode: VNode, container: unknown) => {
-    // 调用setup拿到返回值，获取render函数的返回结果
-
+  const mountComponent = (vnode: VNode, container: HTMLElement) => {
     // 1. 先创建组件实例
     const componentInstance = createComponentInstance(vnode)
     vnode.component = componentInstance
@@ -34,10 +47,10 @@ export function createRenderer(rendererOptions: RendererOptions) {
     setupComponent(componentInstance)
 
     // 3.
-    setupRenderEffect(componentInstance)
+    setupRenderEffect(componentInstance, container)
   }
 
-  const processComponent = (n1: unknown | null, vnode: VNode, container: unknown) => {
+  const processComponent = (n1: unknown | null, vnode: VNode, container: HTMLElement) => {
 
     if (n1 == null) {
       // 新增节点
@@ -47,7 +60,7 @@ export function createRenderer(rendererOptions: RendererOptions) {
     }
   }
 
-  const patch = (n1: unknown | null, vnode: VNode, container: unknown) => {
+  const patch = (n1: unknown | null, vnode: VNode, container: HTMLElement) => {
     const { shapeFlag } = vnode
 
     if (shapeFlag & ShapeFlags.ELEMENT) {// 元素

@@ -6,6 +6,7 @@
     "esm"
   ],
   "dependencies": {
+    "@vue3/reactivity": "workspace:^1.0.0",
     "@vue3/shared": "workspace:^1.0.0"
   }
 }
