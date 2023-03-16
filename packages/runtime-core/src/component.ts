@@ -1,4 +1,4 @@
-import { ShapeFlags, isString } from '@vue3/shared';
+import { ShapeFlags, isString, isFunction, isObject } from '@vue3/shared';
 import { VNode } from './vnode';
 import { componentPublicProxyHandler } from './componentPublicInstance';
 
@@ -14,7 +14,8 @@ export interface ComponentInstance {
   children: Record<string, unknown> | null,
   proxy: {
     _: ComponentInstance;
-  } | null
+  } | null,
+  render: (() => VNode) | null
 }
 
 export function createComponentInstance(vnode: VNode): ComponentInstance {
@@ -29,7 +30,8 @@ export function createComponentInstance(vnode: VNode): ComponentInstance {
     isMounted: false,
     ctx: null,
     children: null,
-    proxy: null
+    proxy: null,
+    render: null
   }
 
   componentInstance.ctx = { _: componentInstance }
@@ -46,6 +48,30 @@ function createSetupContext(componentInstance: ComponentInstance) {
   }
 }
 
+function finishComponentSetup(componentInstance: ComponentInstance) {
+  const component = componentInstance.type as any
+  if (!componentInstance.render) {
+    // 没有render提供，需要对template模板进行编译，产生出render函数
+    if (!component.render && component.template) {
+      const compile = (template: string) => {}
+      component.render = compile(component.template)
+    }
+    componentInstance.render = component.render
+  }
+}
+
+function handleSetupResult(componentInstance: ComponentInstance, setupResult: any) {
+  if (isFunction(setupResult)) {
+    // 如果是函数，这个setupResult就是render
+    componentInstance.render = setupResult
+  } else if (isObject(setupResult)) {
+    // 如果是对象，就是setupState
+    componentInstance.setupState = setupResult
+  }
+
+  finishComponentSetup(componentInstance)
+}
+
 function setupStatefulComponent(componentInstance: ComponentInstance) {
   // proxy只是为了让开发者访问相关属性方便创造出来的
   const proxy = new Proxy(componentInstance.ctx as Exclude<ComponentInstance["ctx"], null>, componentPublicProxyHandler)
@@ -55,9 +81,15 @@ function setupStatefulComponent(componentInstance: ComponentInstance) {
 
   if (!isString(component)) {
     const { setup } = component as any
-    const setupContext = createSetupContext(componentInstance)
 
-    setup(componentInstance.props, setupContext)
+    if (setup) {
+      const setupContext = createSetupContext(componentInstance)
+      const setupResult = setup(componentInstance.props, setupContext)
+
+      handleSetupResult(componentInstance, setupResult)
+    } else {
+      finishComponentSetup(componentInstance)
+    }
   }
 }
 

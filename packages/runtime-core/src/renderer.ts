@@ -1,7 +1,7 @@
 import { ShapeFlags } from '@vue3/shared';
 import { createAppAPI } from './apiCreateApp';
 import { VNode } from './vnode';
-import { createComponentInstance, setupComponent } from './component';
+import { ComponentInstance, createComponentInstance, setupComponent } from './component';
 
 interface RendererOptions {
   createElement(tag: string): Element;
@@ -17,8 +17,11 @@ interface RendererOptions {
 export type Render = (vnode: VNode, container: HTMLElement) => void
 
 export function createRenderer(rendererOptions: RendererOptions) {
-  
-  const setupRenderEffect = (instance: unknown) => { }
+
+  // 实际调用组件的render方法了
+  const setupRenderEffect = (componentInstance: ComponentInstance) => {
+    componentInstance.render?.()
+  }
 
   const mountComponent = (vnode: VNode, container: unknown) => {
     // 调用setup拿到返回值，获取render函数的返回结果
