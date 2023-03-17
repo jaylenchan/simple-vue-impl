@@ -4,7 +4,7 @@ export interface VNode {
   _isVNode: true,
   type: string | Record<string, unknown>,
   props: Record<string, unknown> | null,
-  children: Record<string, unknown> | null,
+  children: any[] | null,
   key: string,
   shapeFlag: number,
   el: HTMLElement | null
@@ -15,7 +15,7 @@ export function isVNode(vnode: any): boolean {
   return !!vnode._isVNode
 }
 
-function normalizeChildren(vnode: VNode, children: Record<string, unknown> | null) {
+function normalizeChildren(vnode: VNode, children: any[] | null) {
   let type = 0
 
   if (!children) {
@@ -30,7 +30,7 @@ function normalizeChildren(vnode: VNode, children: Record<string, unknown> | nul
 
 }
 
-export function createVNode(vnodeType: string | Record<string, unknown>, props: Record<string, unknown> | null, children: Record<string, unknown> | null = null) {
+export function createVNode(vnodeType: string | Record<string, unknown>, props: Record<string, unknown> | null, children: any[] | null = null) {
 
   const shapeFlag = isString(vnodeType) ? ShapeFlags.ELEMENT : isObject(vnodeType) ? ShapeFlags.STATEFUL_COMPONENT : 0
 

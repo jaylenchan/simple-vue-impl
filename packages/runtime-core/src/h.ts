@@ -1,7 +1,7 @@
 import { isArray, isObject } from '@vue3/shared';
 import { createVNode, isVNode } from './vnode';
 
-export function h(elementType: string, propsOrChildren: any, children: any[] | string) {
+export function h(elementType: string, propsOrChildren: any, children: any[] | null) {
   const argsLength = arguments.length
   // chilren要么是字符串要么是数组
   if (argsLength == 2) {

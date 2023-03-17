@@ -18,7 +18,8 @@ export const componentPublicProxyHandler = {
     if (setupState && hasOwn(setupState as object, key)) {
       setupState[key] = newValue
     } else if (props && hasOwn(props as object, key)) {
-      return props[key] = newValue
+      props[key] = newValue
+      return true
     }
 
     return true

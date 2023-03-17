@@ -1,16 +1,14 @@
 {
   "name": "vue3-source",
   "version": "1.0.0",
-  "description": "简易版vue3源码实现",
   "main": "index.js",
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "node scripts/dev.js --module reactivity",
+    "dev": "node scripts/dev.js --module runtime-dom",
     "build": "node scripts/build.js",
     "clear": "node scripts/clear.js"
   },
-  "keywords": [],
   "author": "jaylenchan <jaylen.work@hotmail.com>",
   "license": "MIT",
   "workspaces": [
@@ -20,6 +18,7 @@
     "@rollup/plugin-json": "^6.0.0",
     "@rollup/plugin-node-resolve": "^15.0.1",
     "execa": "^5.0.0",
+    "nodemon": "^2.0.21",
     "rimraf": "^4.1.2",
     "rollup": "^3.15.0",
     "rollup-plugin-typescript2": "^0.34.1",

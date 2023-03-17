@@ -13,7 +13,7 @@ export interface ComponentInstance {
   setupState: Record<string, unknown> | null, // setup 返回的对象
   isMounted: boolean,
   ctx: { _: ComponentInstance } | null,
-  children: Record<string, unknown> | null,
+  children: any[] | null,
   proxy: {
     _: ComponentInstance;
   } | null,
@@ -61,7 +61,7 @@ function finishComponentSetup(componentInstance: ComponentInstance) {
   if (!componentInstance.render) {
     // 没有render提供，需要对template模板进行编译，产生出render函数
     if (!component.render && component.template) {
-      const compile = (template: string) => { }
+      const compile = (template: string) => { template }
       component.render = compile(component.template)
     }
     componentInstance.render = component.render

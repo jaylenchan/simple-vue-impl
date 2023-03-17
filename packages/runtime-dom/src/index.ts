@@ -3,26 +3,23 @@ import { nodeOps } from './nodeOps/index';
 import { patchProp } from './patchProp/index';
 import { merge } from '@vue3/shared';
 
-
+// runtime-dom 调用的是 runtime-core
+export * from '@vue3/runtime-core'
 
 const rendererOptions = merge({ patchProp }, nodeOps)
 
-// runtime-dom 调用的是 runtime-core
-
 export function createApp(rootComponent: Record<string, unknown>, rootProps: Record<string, unknown>) {
   const app = createRenderer(rendererOptions).createApp(rootComponent, rootProps)
-  const { mount } = app
+  const { _mount } = app
 
-  app.mount = (containerSelector: string) => {
+  app.mount = (containerSelector: string): void => {
     const container = document.querySelector(containerSelector)
     if (container) {
       container.innerHTML = ''
+      _mount(container)
     }
-
-    mount(containerSelector)
   }
 
   return app
 }
 
-export * from '@vue3/runtime-core'

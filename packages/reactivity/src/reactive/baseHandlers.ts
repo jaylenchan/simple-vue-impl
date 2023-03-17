@@ -1,7 +1,7 @@
 import { TrackType, TriggerType } from '../operators';
 import { hasOwn, hasChanged, isArray, isInteger } from '@vue3/shared';
 import { track, trigger } from '../effect';
-import { readonly as Readonly, reactive } from '..';
+import { readonly as Readonly, reactive } from '../reactive';
 
 function createGetter(readonly: boolean, shallow: boolean) {
   return (target: object, key: string, receiver: object) => {

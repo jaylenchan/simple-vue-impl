@@ -34,6 +34,7 @@ function createHook(lifecycleType: LifecycleHooks) {
     // 给当前实例增加对应的生命周期
     injectHook(lifecycleType, hook, target)
   }
+  lifecycleHook
 }
 
 export const onBeforeMount = createHook(LifecycleHooks.BEFORE_CREATE)

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>createApp example</title>
+</head>
+
+<body>
+  <div id="app"></div>
+  <script type="module">
+    import { createApp, h } from '../packages/runtime-dom/dist/esm.js'
+
+    const App = {
+      render() {
+        return h('div', 'hello world')
+      }
+    }
+
+    const app = createApp(App, { name: 'jaylen' })
+    app.mount("#app")
+  </script>
+</body>
+
+</html>
