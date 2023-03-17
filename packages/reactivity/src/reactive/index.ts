@@ -16,7 +16,7 @@ const readonlyCache = new WeakMap<Object, Object>();
  * @returns proxy代理对象
  */
 function createReactiveObject(
-  target: Object,
+  target: object,
   handler: ProxyHandler<Object>,
   readonly: boolean,
 ) {
@@ -37,19 +37,19 @@ function createReactiveObject(
   return proxy
 }
 
-export function shallowReactive(target: Object) {
+export function shallowReactive(target: object) {
   return createReactiveObject(target, shallowReactiveHandler, false);
 }
 
-export function reactive(target: Object) {
+export function reactive(target: object) {
   return createReactiveObject(target, reactiveHandler, false);
 }
 
-export function shallowReadonly(target: Object) {
+export function shallowReadonly(target: object) {
   return createReactiveObject(target, shallowReadonlyHandler, true)
 }
 
-export function readonly(target: Object) {
+export function readonly(target: object) {
   return createReactiveObject(target, readonlyHandler, true);
 }
 

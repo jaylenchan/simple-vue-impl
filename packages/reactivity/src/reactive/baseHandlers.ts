@@ -1,7 +1,7 @@
 import { TrackType, TriggerType } from '../operators';
 import { hasOwn, hasChanged, isArray, isInteger } from '@vue3/shared';
 import { track, trigger } from '../effect';
-import { readonly as Readonly, reactive } from '../reactive';
+import { readonly as Readonly, reactive } from './index';
 
 function createGetter(readonly: boolean, shallow: boolean) {
   return (target: object, key: string, receiver: object) => {
@@ -27,13 +27,13 @@ function createGetter(readonly: boolean, shallow: boolean) {
 function createSetter(_shallow: boolean) {
   // setter做两件事：设置值 + 视图重刷新
   return (target: Object, key: string, newVal: unknown, receiver: unknown) => {
-    const flag = Reflect.set(target, key, newVal, receiver);
-
     // NOTE:如何判断一个属性是新增还是修改：方式就是拿这个属性到对象那边查一下，有这个属性此时触发setter就是修改操作，否则就是新增操作咯: const oldValue = target[key]
     // 第一步：判断本次setter操作是新增操作还是修改操作
     // 对于修改操作，只拿数组合法范围的key进行判断，对于对象，直接判断target有没有该key
     const hadKey = isArray(target) && isInteger(key) ? +key < target.length : hasOwn(target, key)
     const oldVal = target[key as keyof typeof target]
+    const flag = Reflect.set(target, key, newVal, receiver);
+
     if (!hadKey) {
       // 新增
       trigger(target, TriggerType.ADD, key, newVal)

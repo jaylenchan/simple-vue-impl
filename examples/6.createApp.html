@@ -11,13 +11,15 @@
 <body>
   <div id="app"></div>
   <script type="module">
-    import { createApp, h } from '../packages/runtime-dom/dist/esm.js'
+    import { createApp, h, reactive } from '../packages/vue/dist/esm.js'
 
     const App = {
       setup() {
-        return () => {
-          return h('div', { style: { fontSize: '28px' }, onClick: () => console.log("Trigger Click") }, ['hello world', 'nihao'])
-        }
+        const jaylen = reactive({
+          name: 'jaylen'
+        })
+
+        return () => h('div', { style: { fontSize: '28px' }, onClick: () => { jaylen.name = "jaylenchan" } }, jaylen.name)
       }
     }
 

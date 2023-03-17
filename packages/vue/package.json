@@ -1,0 +1,14 @@
+{
+  "name": "@vue3/vue",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "formats": [
+    "esm",
+    "global"
+  ],
+  "dependencies": {
+    "@vue3/reactivity": "workspace:^1.0.0",
+    "@vue3/runtime-dom": "workspace:^1.0.0"
+  }
+}

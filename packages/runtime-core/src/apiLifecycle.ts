@@ -1,5 +1,5 @@
 
-import { ComponentInstance, currentComponentInstance } from './component'
+import { ComponentInstance } from './component'
 
 export const enum LifecycleHooks {
   BEFORE_CREATE = 'bc',
@@ -28,6 +28,7 @@ function injectHook(lifecycleType: LifecycleHooks, hook: Function, target: Compo
     hooks.push(hook)
   }
 }
+const currentComponentInstance = {} as any
 
 function createHook(lifecycleType: LifecycleHooks) {
   const lifecycleHook = (hook: Function, target = currentComponentInstance) => {

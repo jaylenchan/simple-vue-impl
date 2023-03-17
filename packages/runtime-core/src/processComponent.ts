@@ -11,7 +11,6 @@ function setupRenderEffect(componentInstance: ComponentInstance, container: Elem
       // 初次渲染
       // 底下代码调用后拿到VNode：subTree = () => h('div', 'hello world')
       const subTree = componentInstance.render?.call(componentInstance.proxy!, componentInstance.proxy!)!
-
       componentInstance.subTree = subTree
 
       // 用组件render函数的返回值，继续进行patch渲染
@@ -20,6 +19,7 @@ function setupRenderEffect(componentInstance: ComponentInstance, container: Elem
       componentInstance.isMounted = true
     } else {
       // 更新渲染
+      console.log("Trigger Update ddddd")
     }
   })
 }
@@ -42,5 +42,6 @@ export function processComponent(n1: unknown | null, vnode: VNode, container: El
     mountComponent(vnode, container, rendererOptions)
   } else {
     // 更新节点
+    console.log("Trigger Update")
   }
 }

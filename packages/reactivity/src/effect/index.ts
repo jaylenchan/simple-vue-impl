@@ -67,31 +67,31 @@ export function trigger(
           // 比如上面的effect的情况就是
           execReactiveEffects.add(effect)
         })
-      } else {
-        // 对象的情况，直接从deps取出对应key的reactiveEffects加入到执行集合中
-        if (key != void 0) {
-          const reactiveEffects = deps.get(key)!
-
-          reactiveEffects.forEach(effect => {
-            execReactiveEffects.add(effect)
-          })
-        }
-
-        switch (triggerType) {
-          case TriggerType.ADD: {
-
-            if (!isArray(target)) {
-
-            } else if (isInteger(key)) {
-              const lengthReactiveEffects = deps.get(length.toString())!
-              lengthReactiveEffects.forEach(effect => execReactiveEffects.add(effect))
-            }
-
-            break;
-          }
-        }
       }
     }))
+  } else {
+    // 对象的情况，直接从deps取出对应key的reactiveEffects加入到执行集合中
+    if (key != void 0) {
+      const reactiveEffects = deps.get(key)!
+
+      reactiveEffects.forEach(effect => {
+        execReactiveEffects.add(effect)
+      })
+    }
+
+    switch (triggerType) {
+      case TriggerType.ADD: {
+
+        if (!isArray(target)) {
+
+        } else if (isInteger(key)) {
+          const lengthReactiveEffects = deps.get(length.toString())!
+          lengthReactiveEffects.forEach(effect => execReactiveEffects.add(effect))
+        }
+
+        break;
+      }
+    }
   }
 
   execReactiveEffects.forEach(reactiveEffect => {
@@ -149,10 +149,12 @@ function createReactiveEffect(fn: Function, options: EffectOptions = {}) {
      */
     if (!effectStack.includes(reactiveEffect)) {
       try {
-        // 在用户fn被调用之前，依赖收集还没开始，此时应该保存当前执行的reactiveEffect
-        activeEffect = reactiveEffect
+
         // 每次执行自定义函数fn之前，都将当前活跃的activeEffect推入栈
         effectStack.push(reactiveEffect);
+        // 在用户fn被调用之前，依赖收集还没开始，此时应该保存当前执行的reactiveEffect
+        activeEffect = effectStack[effectStack.length - 1]
+
         // 用户自定义的fn被调用，执行fn的时候，由于内部常常会跟着使用代理取值，因此又会接着触发代理的getter,这时候如果是非readonly代理，就开始收集相关依赖了 。
         // @file-path packages/reactivity/src/reactive/baseHandlers.ts
         return fn();

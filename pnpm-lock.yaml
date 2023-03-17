@@ -44,6 +44,14 @@ importers:
       '@vue3/runtime-core': link:../runtime-core
       '@vue3/shared': link:../shared
 
+  packages/vue:
+    specifiers:
+      '@vue3/reactivity': workspace:^1.0.0
+      '@vue3/runtime-dom': workspace:^1.0.0
+    dependencies:
+      '@vue3/reactivity': link:../reactivity
+      '@vue3/runtime-dom': link:../runtime-dom
+
 packages:
 
   registry.npmmirror.com/@rollup/plugin-json/6.0.0_rollup@3.19.1:

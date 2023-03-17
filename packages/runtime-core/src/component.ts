@@ -2,7 +2,7 @@ import { ShapeFlags, isString, isFunction, isObject } from '@vue3/shared';
 import { VNode } from './h';
 import { componentPublicProxyHandler } from './componentPublicInstance';
 
-import type { ReactiveEffect } from '@vue3/reactivity';
+import { ReactiveEffect } from '@vue3/reactivity';
 
 export interface ComponentInstance {
   vnode: VNode,
@@ -80,8 +80,6 @@ function handleSetupResult(componentInstance: ComponentInstance, setupResult: an
   finishComponentSetup(componentInstance)
 }
 
-export let currentComponentInstance: ComponentInstance | null = null
-
 function setupStatefulComponent(componentInstance: ComponentInstance) {
   // proxy只是为了让开发者访问相关属性方便创造出来的
   const proxy = new Proxy(componentInstance.ctx as Exclude<ComponentInstance["ctx"], null>, componentPublicProxyHandler)
@@ -103,12 +101,9 @@ function setupStatefulComponent(componentInstance: ComponentInstance) {
     const { setup } = component as any
 
     if (setup) {
-      currentComponentInstance = componentInstance
 
       const setupContext = createSetupContext(componentInstance)
       const setupResult = setup(componentInstance.props, setupContext)
-
-      currentComponentInstance = null
 
       handleSetupResult(componentInstance, setupResult)
     } else {
