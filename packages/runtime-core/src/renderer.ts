@@ -1,8 +1,7 @@
 import { ShapeFlags } from '@vue3/shared';
-import { VNode } from './vnode';
-import { ComponentInstance, createComponentInstance, setupComponent } from './component';
-import { effect } from '@vue3/reactivity';
-import { h } from './h';
+import { h, VNode } from './h';
+import { processComponent } from './processComponent';
+import { processElement } from './processElement';
 
 export type Mount = (containerSelector: string) => void
 
@@ -29,55 +28,17 @@ interface Renderer {
   }
 }
 
-// 实际调用组件的render方法了
-const setupRenderEffect = (componentInstance: ComponentInstance, container: Element) => {
-  // 每个组件都有一个effect，vue3是组件级更新
-  componentInstance.update = effect(function componentEffect() {
-    if (!componentInstance.isMounted) {
-      // 初次渲染
-      // 底下代码调用后拿到VNode：subTree = () => h('div', 'hello world')
-      const subTree = componentInstance.render?.call(componentInstance.proxy!, componentInstance.proxy!)!
-
-      componentInstance.subTree = subTree
-
-      patch(null, subTree, container)
-
-      componentInstance.isMounted = true
-    } else {
-      // 更新渲染
-    }
-  })
-}
-
-const mountComponent = (vnode: VNode, container: Element) => {
-  // 1. 先创建组件实例componentInstance
-  const componentInstance = createComponentInstance(vnode)
-  vnode.component = componentInstance
-
-  // 2.componentInstance将vnode当中自己需要的数据捡到自己身上以及做一些组件准备工作（setup函数调用等）
-  setupComponent(componentInstance)
-
-  // 3.
-  setupRenderEffect(componentInstance, container)
-}
-
-const processComponent = (n1: unknown | null, vnode: VNode, container: Element) => {
-  if (n1 == null) {
-    // 新增节点
-    mountComponent(vnode, container)
-  } else {
-    // 更新节点
-  }
-}
-
 /** 
- * 拿出vnode的shapeFlag根据不同shapeFlag的vnode，创建出对应的真实节点
+ * 作用：拿出vnode的shapeFlag,根据不同shapeFlag判断vnode是一个元素还是组件，创建出对应的真实节点
+ * 初始化和更新渲染都会用这个方法
  */
-const patch = (n1: unknown | null, vnode: VNode, container: Element) => {
+export const patch = (n1: unknown | null, vnode: VNode, container: Element) => {
   const { shapeFlag } = vnode
 
+  // 针对不同类型做初始化操作或更新操作
+  // 根据不同shapeFlag判断vnode是一个元素还是组件
   if (shapeFlag & ShapeFlags.ELEMENT) {// 元素
-
+    processElement()
   } else if (shapeFlag & ShapeFlags.STATEFUL_COMPONENT) { // 组件
     processComponent(n1, vnode, container)
   }

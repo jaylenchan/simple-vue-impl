@@ -1,5 +1,5 @@
 import { ShapeFlags, isString, isFunction, isObject } from '@vue3/shared';
-import { VNode } from './vnode';
+import { VNode } from './h';
 import { componentPublicProxyHandler } from './componentPublicInstance';
 
 import type { ReactiveEffect } from '@vue3/reactivity';
