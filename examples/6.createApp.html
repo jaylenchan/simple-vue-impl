@@ -16,16 +16,19 @@
     const App = {
       setup() {
         const jaylen = reactive({
-          name: 'jaylen'
+          name: 'jaylen',
+          age: 11,
+          showDiv: true
         })
 
         function handleClick() {
-          jaylen.name = "jaylenchan"
-          jaylen.name = 'jay'
-          jaylen.name = 'jaylen'
+          jaylen.showDiv = false
         }
 
-        return () => h('div', { style: { fontSize: '28px' }, onClick: handleClick }, jaylen.name)
+        return () => {
+          return jaylen.showDiv ? h('div', { style: { fontSize: '28px' }, onClick: handleClick }, jaylen.name)
+            : h('span', jaylen.age)
+        }
       }
     }
 

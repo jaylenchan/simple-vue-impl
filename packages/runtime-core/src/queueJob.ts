@@ -12,7 +12,6 @@ function flushJobs() {
   jobQueue.sort((a, b) => a.id - b.id)
 
   for (const job of jobQueue) {
-    console.log("JobQ", jobQueue)
     job()
   }
 

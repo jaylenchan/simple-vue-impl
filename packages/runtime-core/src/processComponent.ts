@@ -19,10 +19,14 @@ function setupRenderEffect(componentInstance: ComponentInstance, container: Elem
 
       componentInstance.isMounted = true
     } else {
-      // 更新渲染
-      console.log("Trigger Update ddddd")
+      console.log("Update VNode")
     }
   }, {
+    /**
+     * 清晰一点是，这里用了调度器，状态刷新重新触发reactiveEffect就会走调度器的逻辑，而调度器本身会接收原来的reactiveEffect
+     * 因此queueJob内部实际是对reactiveEffect做了限制而已，实际上调用逻辑还是调用了reactiveEffect，只不过对整体流程调度
+     * 做了一个优化，最终还是会调用reactiveEffect去更新视图
+     */
     scheduler: queueJob
   })
 }
