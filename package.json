@@ -5,10 +5,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev:reactivity": "node scripts/dev.js --module reactivity",
-    "dev:runtime-dom": "node scripts/dev.js --module runtime-dom",
     "dev:vue": "node scripts/dev.js --module vue",
-    "dev": "pnpm dev:reactivity && pnpm dev:runtime-dom && pnpm dev:vue",
+    "dev": "pnpm dev:vue",
     "build": "node scripts/build.js",
     "clear": "node scripts/clear.js"
   },

@@ -1,14 +1,14 @@
 import { isArray, isInteger } from '@vue3/shared';
 import { TrackType, TriggerType } from '../operators';
 
-type EffectOptions = { lazy?: boolean; scheduler?: Function };
+type EffectOptions = { lazy?: boolean; scheduler?: (reactiveEffect: ReactiveEffect) => void };
 
 export interface ReactiveEffect {
   (...args: unknown[]): void;
   id: number;
   _isEffect: boolean;
   raw: Function;
-  options: { lazy?: boolean; scheduler?: Function };
+  options: EffectOptions
 }
 
 
@@ -96,7 +96,7 @@ export function trigger(
 
   execReactiveEffects.forEach(reactiveEffect => {
     if (reactiveEffect.options.scheduler) {
-      reactiveEffect.options.scheduler()
+      reactiveEffect.options.scheduler(reactiveEffect)
     } else {
       reactiveEffect()
     }

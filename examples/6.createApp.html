@@ -19,7 +19,13 @@
           name: 'jaylen'
         })
 
-        return () => h('div', { style: { fontSize: '28px' }, onClick: () => { jaylen.name = "jaylenchan" } }, jaylen.name)
+        function handleClick() {
+          jaylen.name = "jaylenchan"
+          jaylen.name = 'jay'
+          jaylen.name = 'jaylen'
+        }
+
+        return () => h('div', { style: { fontSize: '28px' }, onClick: handleClick }, jaylen.name)
       }
     }
 

@@ -2,6 +2,7 @@ import { effect } from '@vue3/reactivity'
 import { ComponentInstance, createComponentInstance, setupComponent } from './component'
 import { VNode } from './h'
 import { RendererOptions, patch } from './renderer'
+import { queueJob } from './queueJob'
 
 // 实际调用组件的render方法了
 function setupRenderEffect(componentInstance: ComponentInstance, container: Element, rendererOptions: RendererOptions) {
@@ -21,6 +22,8 @@ function setupRenderEffect(componentInstance: ComponentInstance, container: Elem
       // 更新渲染
       console.log("Trigger Update ddddd")
     }
+  }, {
+    scheduler: queueJob
   })
 }
 
