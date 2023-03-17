@@ -11,9 +11,6 @@
   },
   "author": "jaylenchan <jaylen.work@hotmail.com>",
   "license": "MIT",
-  "workspaces": [
-    "packages/*"
-  ],
   "devDependencies": {
     "@rollup/plugin-json": "^6.0.0",
     "@rollup/plugin-node-resolve": "^15.0.1",
