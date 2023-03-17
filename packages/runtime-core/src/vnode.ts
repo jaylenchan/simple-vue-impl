@@ -11,6 +11,8 @@ export interface VNode {
   component: unknown | null
 }
 
+export type VNodeType = string | Record<string, unknown>
+
 export function isVNode(vnode: any): boolean {
   return !!vnode._isVNode
 }
@@ -30,7 +32,11 @@ function normalizeChildren(vnode: VNode, children: any[] | null) {
 
 }
 
-export function createVNode(vnodeType: string | Record<string, unknown>, props: Record<string, unknown> | null, children: any[] | null = null) {
+/**
+ * 根据vnodeType创建出对应的Vnode，其中vnodeType可以是字符串或者是一个组件component，他们都会被挂到vnode的type上。
+ * 所以vnode.type得可能值是字符串或者组件
+ */
+export function createVNode(vnodeType: VNodeType, props: Record<string, unknown> | null, children: any[] | null = null) {
 
   const shapeFlag = isString(vnodeType) ? ShapeFlags.ELEMENT : isObject(vnodeType) ? ShapeFlags.STATEFUL_COMPONENT : 0
 

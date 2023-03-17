@@ -85,6 +85,16 @@ export let currentComponentInstance: ComponentInstance | null = null
 function setupStatefulComponent(componentInstance: ComponentInstance) {
   // proxy只是为了让开发者访问相关属性方便创造出来的
   const proxy = new Proxy(componentInstance.ctx as Exclude<ComponentInstance["ctx"], null>, componentPublicProxyHandler)
+  /**
+   * component如下：
+   *  const App = {
+   *    setup() {
+   *      return () => {
+   *        return h('div', 'hello world')
+   *      }
+   *    }
+   * } 
+   */
   const component = componentInstance.type
 
   componentInstance.proxy = proxy

@@ -14,8 +14,10 @@
     import { createApp, h } from '../packages/runtime-dom/dist/esm.js'
 
     const App = {
-      render() {
-        return h('div', 'hello world')
+      setup() {
+        return () => {
+          return h('div', 'hello world')
+        }
       }
     }
 

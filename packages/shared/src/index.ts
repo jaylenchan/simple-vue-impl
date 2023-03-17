@@ -22,6 +22,10 @@ export const isObject = (val: unknown): boolean => {
   return typeof val == 'object' && val != null;
 };
 
+export const isPlainObject = (val: unknown): boolean => {
+  return Object.prototype.toString.call(val) === '[object Object]'
+}
+
 export const hasOwn = (target: Object, key: string): boolean => {
   return Object.prototype.hasOwnProperty.call(target, key);
 };
