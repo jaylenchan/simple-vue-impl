@@ -1,10 +1,10 @@
 import { effect } from '@vue3/reactivity'
 import { ComponentInstance, createComponentInstance, setupComponent } from './component'
 import { VNode } from './h'
-import {patch} from './renderer'
+import { RendererOptions, patch } from './renderer'
 
 // 实际调用组件的render方法了
-export const setupRenderEffect = (componentInstance: ComponentInstance, container: Element) => {
+function setupRenderEffect(componentInstance: ComponentInstance, container: Element, rendererOptions: RendererOptions) {
   // 每个组件都有一个effect，vue3是组件级更新
   componentInstance.update = effect(function componentEffect() {
     if (!componentInstance.isMounted) {
@@ -14,7 +14,8 @@ export const setupRenderEffect = (componentInstance: ComponentInstance, containe
 
       componentInstance.subTree = subTree
 
-      patch(null, subTree, container)
+      // 用组件render函数的返回值，继续进行patch渲染
+      patch(null, subTree, container, rendererOptions)
 
       componentInstance.isMounted = true
     } else {
@@ -23,7 +24,7 @@ export const setupRenderEffect = (componentInstance: ComponentInstance, containe
   })
 }
 
-export const mountComponent = (vnode: VNode, container: Element) => {
+function mountComponent(vnode: VNode, container: Element, rendererOptions: RendererOptions): void {
   // 1. 先创建组件实例componentInstance
   const componentInstance = createComponentInstance(vnode)
   vnode.component = componentInstance
@@ -32,13 +33,13 @@ export const mountComponent = (vnode: VNode, container: Element) => {
   setupComponent(componentInstance)
 
   // 3.
-  setupRenderEffect(componentInstance, container)
+  setupRenderEffect(componentInstance, container, rendererOptions)
 }
 
-export const processComponent = (n1: unknown | null, vnode: VNode, container: Element) => {
+export function processComponent(n1: unknown | null, vnode: VNode, container: Element, rendererOptions: RendererOptions): void {
   if (n1 == null) {
     // 新增节点
-    mountComponent(vnode, container)
+    mountComponent(vnode, container, rendererOptions)
   } else {
     // 更新节点
   }

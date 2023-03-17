@@ -10,18 +10,18 @@ import { patchAttr } from './attr';
 // 2. 之前有，之后没有 ： 删  (prevValue != null, newValue == null)
 // 3. 之前有，之后有 ： 改  (prevValue != null, newValue != null)
 // key的可能性有几种： style | class | event | attr
-export const patchProp = (el: HTMLElement, key: string, prevValue: unknown, newValue: unknown) => {
+export const patchProp = (el: Element, key: string, prevValue: unknown, newValue: unknown) => {
   if (key == 'class') {
     patchClass(el, newValue as string)
   } else if (key == 'style') {
-    patchStyle(el, prevValue as CSSStyleDeclaration, newValue as CSSStyleDeclaration)
+    patchStyle(el as HTMLElement, prevValue as CSSStyleDeclaration, newValue as CSSStyleDeclaration)
   } else {
     if (isEvent(key)) {
       // event
-      patchEvent(el, key, newValue as EventListener)
+      patchEvent(el as HTMLElement, key, newValue as EventListener)
     } else {
       // attr
-      patchAttr(el, key, newValue as string)
+      patchAttr(el as HTMLElement, key, newValue as string)
     }
   }
 }

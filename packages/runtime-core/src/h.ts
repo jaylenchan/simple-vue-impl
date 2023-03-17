@@ -5,10 +5,10 @@ export interface VNode {
   _isVNode: true,
   type: string | Record<string, unknown>,
   props: Record<string, unknown> | null,
-  children: any[] | null,
+  children: any[] | string | null,
   key: string,
   shapeFlag: number,
-  el: HTMLElement | null
+  el: Element | null
   component: unknown | null
 }
 
@@ -18,7 +18,7 @@ export function isVNode(vnode: any): boolean {
   return !!vnode._isVNode
 }
 
-function normalizeChildren(vnode: VNode, children: any[] | null) {
+function normalizeChildren(vnode: VNode, children: any[] | string | null) {
   let type = 0
 
   if (!children) {
@@ -37,7 +37,7 @@ function normalizeChildren(vnode: VNode, children: any[] | null) {
  * 根据vnodeType创建出对应的Vnode，其中vnodeType可以是字符串或者是一个组件component，他们都会被挂到vnode的type上。
  * 所以vnode.type得可能值是字符串或者组件
  */
-export function createVNode(vnodeType: VNodeType, props: Record<string, unknown> | null, children: any[] | null = null) {
+export function createVNode(vnodeType: VNodeType, props: Record<string, unknown> | null, children: any[] | string | null = null) {
   const shapeFlag = isString(vnodeType) ? ShapeFlags.ELEMENT : isObject(vnodeType) ? ShapeFlags.STATEFUL_COMPONENT : 0
 
   const vnode: VNode = {
@@ -56,7 +56,7 @@ export function createVNode(vnodeType: VNodeType, props: Record<string, unknown>
   return vnode
 }
 
-export function h(vnodeType: VNodeType, propsOrChildren: any, children?: any[] | null) {
+export function h(vnodeType: VNodeType, propsOrChildren: any, children?: any[] | string | null) {
   const argsLength = arguments.length
   // chilren要么是字符串要么是数组
   if (argsLength == 2) {

@@ -17,7 +17,7 @@ function createInvoker(listener: EventListener) {
  * 这时候修改，只需要修改invoker.value绑定的值，不需要通过removeEventListener然后再addEventListener的方式对处理函数进行修改，包裹一层就更简单巧妙
  */
 export const patchEvent = (el: HTMLElement, event: string, newListener?: EventListener) => {
-  const invokerCache = el.invokerCache
+  const invokerCache = el.invokerCache || {}
 
   const eventName = event.slice(2).toLowerCase() as keyof HTMLEvents
   const existInvoker = invokerCache[eventName]

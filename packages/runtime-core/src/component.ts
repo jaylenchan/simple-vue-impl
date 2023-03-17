@@ -13,7 +13,7 @@ export interface ComponentInstance {
   setupState: Record<string, unknown> | null, // setup 返回的对象
   isMounted: boolean,
   ctx: { _: ComponentInstance } | null,
-  children: any[] | null,
+  children: any[] | string | null,
   proxy: {
     _: ComponentInstance;
   } | null,

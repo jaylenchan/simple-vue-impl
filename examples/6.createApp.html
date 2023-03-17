@@ -16,7 +16,7 @@
     const App = {
       setup() {
         return () => {
-          return h('div', 'hello world')
+          return h('div', { style: { fontSize: '28px' }, onClick: () => console.log("Trigger Click") }, ['hello world', 'nihao'])
         }
       }
     }

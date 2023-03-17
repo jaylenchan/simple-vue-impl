@@ -2,10 +2,11 @@ import { ShapeFlags } from '@vue3/shared';
 import { h, VNode } from './h';
 import { processComponent } from './processComponent';
 import { processElement } from './processElement';
+import { processText } from './processText';
 
 export type Mount = (containerSelector: string) => void
 
-interface RendererOptions {
+export interface RendererOptions {
   createElement(tag: string): Element;
   removeElement(child: Element): void;
   insertElement(child: Element, parent: Element, anchor?: Element): void;
@@ -13,7 +14,7 @@ interface RendererOptions {
   updateElement(el: Element, text: string): void;
   createTextNode(text: string): Text;
   updateTextNode(node: Text, text: string): void;
-  patchProp(el: HTMLElement, key: string, prevValue: unknown, newValue: unknown): void
+  patchProp(el: Element, key: string, prevValue: unknown, newValue: unknown): void
 }
 
 export type Render = (vnode: VNode, container: Element) => void
@@ -29,30 +30,37 @@ interface Renderer {
 }
 
 /** 
- * 作用：拿出vnode的shapeFlag,根据不同shapeFlag判断vnode是一个元素还是组件，创建出对应的真实节点
- * 初始化和更新渲染都会用这个方法
- */
-export const patch = (n1: unknown | null, vnode: VNode, container: Element) => {
-  const { shapeFlag } = vnode
+* 作用：拿出vnode的shapeFlag,根据不同shapeFlag判断vnode是一个普通元素还是组件还是文本元素，创建出对应的真实节点
+* 初始化和更新渲染都会用这个方法
+*/
+export const patch = (n1: unknown | null, vnode: VNode, container: Element, rendererOptions: RendererOptions) => {
+  const { shapeFlag, type } = vnode
 
-  // 针对不同类型做初始化操作或更新操作
-  // 根据不同shapeFlag判断vnode是一个元素还是组件
-  if (shapeFlag & ShapeFlags.ELEMENT) {// 元素
-    processElement()
-  } else if (shapeFlag & ShapeFlags.STATEFUL_COMPONENT) { // 组件
-    processComponent(n1, vnode, container)
+  switch (type) {
+    case "Text": { // vnode是文本元素
+      processText(n1, vnode, container, rendererOptions)
+      break;
+    }
+    default: {
+      // 针对不同类型做初始化操作或更新操作
+      // 根据不同shapeFlag判断vnode是一个普通元素还是组件
+      if (shapeFlag & ShapeFlags.ELEMENT) {// 元素
+        processElement(n1, vnode, container, rendererOptions)
+      } else if (shapeFlag & ShapeFlags.STATEFUL_COMPONENT) { // 组件
+        processComponent(n1, vnode, container, rendererOptions)
+      }
+    }
   }
-}
 
-/**
- * 将虚拟节点转化成真实节点挂载到container上
- */
-const render = (vnode: VNode, container: Element) => {
-  patch(null, vnode, container)
 }
 
 export function createRenderer(rendererOptions: RendererOptions): Renderer {
-  rendererOptions
+  /**
+   * 将虚拟节点转化成真实节点挂载到container上
+   */
+  const render = (vnode: VNode, container: Element) => {
+    patch(null, vnode, container, rendererOptions)
+  }
 
   const renderer = {
     createApp: (rootComponent: Record<string, unknown>, rootProps: Record<string, unknown>) => {
