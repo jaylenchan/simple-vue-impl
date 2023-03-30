@@ -3,26 +3,29 @@ import { VNode } from './h';
 import { componentPublicProxyHandler } from './componentPublicInstance';
 
 import { ReactiveEffect } from '@vue3/reactivity';
+import { LifecycleHooks } from './apiLifecycle';
 
-export interface ComponentInstance {
-  vnode: VNode,
-  type: VNode["type"],
-  props: Record<string, unknown> | null,
-  attrs: Record<string, unknown> | null,
-  slots: Record<string, unknown> | null,
-  setupState: Record<string, unknown> | null, // setup 返回的对象
-  isMounted: boolean,
-  ctx: { _: ComponentInstance } | null,
-  children: any[] | string | null,
+export type ComponentInstance = {
+  [key in LifecycleHooks]: any[];
+} & {
+  vnode: VNode;
+  type: VNode["type"];
+  props: Record<string, unknown> | null;
+  attrs: Record<string, unknown> | null;
+  slots: Record<string, unknown> | null;
+  setupState: Record<string, unknown> | null; // setup 返回的对象
+  isMounted: boolean;
+  ctx: { _: ComponentInstance; } | null;
+  children: any[] | string | null;
   proxy: {
     _: ComponentInstance;
-  } | null,
+  } | null;
   render: ((proxy: {
     _: ComponentInstance;
-  }) => VNode) | null
-  update: ReactiveEffect | null
-  subTree: VNode | null
-}
+  }) => VNode) | null;
+  update: ReactiveEffect | null;
+  subTree: VNode | null;
+};
 
 export function createComponentInstance(vnode: VNode): ComponentInstance {
   // 表示组件的相关信息
@@ -80,6 +83,8 @@ function handleSetupResult(componentInstance: ComponentInstance, setupResult: an
   finishComponentSetup(componentInstance)
 }
 
+export let curComponentInstance: ComponentInstance | null = null
+
 function setupStatefulComponent(componentInstance: ComponentInstance) {
   // proxy只是为了让开发者访问相关属性方便创造出来的
   const proxy = new Proxy(componentInstance.ctx as Exclude<ComponentInstance["ctx"], null>, componentPublicProxyHandler)
@@ -103,7 +108,12 @@ function setupStatefulComponent(componentInstance: ComponentInstance) {
     if (setup) {
 
       const setupContext = createSetupContext(componentInstance)
+
+      curComponentInstance = componentInstance
+
       const setupResult = setup(componentInstance.props, setupContext)
+
+      curComponentInstance = null
 
       handleSetupResult(componentInstance, setupResult)
     } else {

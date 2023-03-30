@@ -1,5 +1,5 @@
 
-import { ComponentInstance } from './component'
+import { ComponentInstance, curComponentInstance } from './component'
 
 export const enum LifecycleHooks {
   BEFORE_CREATE = 'bc',
@@ -18,24 +18,26 @@ export const enum LifecycleHooks {
   SERVER_PREFETCH = 'sp'
 }
 
-function injectHook(lifecycleType: LifecycleHooks, hook: Function, target: ComponentInstance | null) {
-  if (!target) {
+function injectHook(lifecycleType: LifecycleHooks, hook: Function, componentInstance: ComponentInstance | null) {
+  if (!componentInstance) {
     return console.warn(`Lifecycle injection APIs can only be used during execution of setup().`
     )
   } else {
-    const hooks = target[lifecycleType as unknown as keyof typeof target] || (target[lifecycleType as unknown as keyof typeof target] = [] as any)
+    if (!componentInstance[lifecycleType]) {
+      componentInstance[lifecycleType] = []
+    }
+    const hooks = componentInstance[lifecycleType]
 
     hooks.push(hook)
   }
 }
-const currentComponentInstance = {} as any
 
 function createHook(lifecycleType: LifecycleHooks) {
-  const lifecycleHook = (hook: Function, target = currentComponentInstance) => {
+  const lifecycleHook = (hook: Function, componentInstance: ComponentInstance | null = curComponentInstance) => {
     // 给当前实例增加对应的生命周期
-    injectHook(lifecycleType, hook, target)
+    injectHook(lifecycleType, hook, componentInstance)
   }
-  lifecycleHook
+  return lifecycleHook
 }
 
 export const onBeforeMount = createHook(LifecycleHooks.BEFORE_CREATE)

@@ -42,6 +42,7 @@ function queueFlush() {
   }
 }
 
+// 这个queueJob其实就是effect函数的配置项中的scheduler。当effect配置了scheduler，就会走用户指定的自定义逻辑。不过这个scheduler本身还会接收原来的effect作为参数
 export function queueJob(job: ReactiveEffect) {
   // 这里对job去重了
   /**
